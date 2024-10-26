@@ -11,6 +11,16 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+
+# Hardhat files
+/artifacts
+/cache
+/deployments
+
+# solidity-coverage files
+/coverage
+/coverage.json
 
 # Editor directories and files
 .vscode/*
