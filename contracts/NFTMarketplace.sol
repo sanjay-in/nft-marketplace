@@ -15,6 +15,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
     // State variables
     address payable private immutable i_owner;
+    uint256 private immutable i_listingPrice;
     uint256 private s_tokenId;
     uint256 private s_itemSold;
     mapping(uint256 => ListedToken) private s_tokenIdToListedToken;
@@ -28,8 +29,9 @@ contract NFTMarketplace is ERC721URIStorage {
         bool sold
     );
 
-    constructor() ERC721("NFTMarketplace", "NFT") {
+    constructor(uint256 listingPrice) ERC721("NFTMarketplace", "NFT") {
         i_owner = payable(msg.sender);
+        i_listingPrice = listingPrice;
     }
 
     // Getter functions
