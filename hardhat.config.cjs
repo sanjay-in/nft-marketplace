@@ -1,5 +1,7 @@
 require("hardhat-deploy");
 require("solidity-coverage");
+require("@nomicfoundation/hardhat-ethers");
+require("@nomicfoundation/hardhat-chai-matchers");
 require("dotenv").config();
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
