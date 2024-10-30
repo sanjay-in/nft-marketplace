@@ -1,4 +1,4 @@
-const { network, getNamedAccounts, deployments } = require("hardhat");
+const { network, getNamedAccounts, deployments, ethers } = require("hardhat");
 const { developmentChains } = require("../helper-hardhat.config.js");
 const verify = require("../utils/verify/verify.js");
 const { networks } = require("../hardhat.config");
@@ -7,7 +7,9 @@ module.exports = async () => {
   const { deployer } = await getNamedAccounts();
   const { deploy, log } = deployments;
 
-  const args = [];
+  const listingPrice = ethers.parseEther("0.001");
+
+  const args = [listingPrice];
 
   log("Deploying NFT Marketplace contract....");
 
