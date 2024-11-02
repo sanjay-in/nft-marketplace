@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 error NFTMarketplace__NotOwner();
 error NFTMarketplace__PriceCannotBeZero();
 error NFTMarketplace__ListingPriceNotEqual();
+error NFTMarketplace__ListingPriceTransferFailed();
+error NFTMarketplace__PriceTransferFailed();
 
 contract NFTMarketplace is ERC721URIStorage {
     // Type declaration
@@ -32,6 +34,12 @@ contract NFTMarketplace is ERC721URIStorage {
         address indexed seller,
         uint256 price,
         bool sold
+    );
+
+    event TokenPurchased(
+        uint256 indexed tokenId,
+        address indexed owner,
+        uint256 price
     );
 
     // Modifiers
@@ -107,6 +115,45 @@ contract NFTMarketplace is ERC721URIStorage {
         // Transfers to token to the contract to be listed and lets the contract sell on creator's behalf
         _transfer(msg.sender, address(this), _tokenId);
         emit TokenListed(_tokenId, address(this), msg.sender, _price, false);
+    }
+
+    /**
+     * @notice buyToken function transfers the NFT from the contract to the buyer
+     * @param _tokenId to transfer
+     */
+    function buyNFT(uint256 _tokenId) external payable {
+        address oldSeller = s_tokenIdToListedToken[_tokenId].seller;
+
+        s_tokenIdToListedToken[_tokenId].owner = payable(msg.sender);
+        s_tokenIdToListedToken[_tokenId].seller = payable(address(0)); // No one becomes seller after the NFT is purchaced
+        s_tokenIdToListedToken[_tokenId].sold = true;
+
+        s_itemSold++;
+
+        // Transfers token from contract to the buyer
+        _safeTransfer(address(this), msg.sender, _tokenId);
+        // Approve the contract to sell NFTs on your behalf
+        approve(address(this), _tokenId);
+
+        // Sends the listing price to owmer of the contract
+        (bool listingPriceTransferSuccess, ) = payable(i_owner).call{
+            value: i_listingPrice
+        }("");
+        if (listingPriceTransferSuccess) {
+            revert NFTMarketplace__ListingPriceTransferFailed();
+        }
+        // Sends the price to the creator of NFT (seller)
+        (bool priceTransferSuccess, ) = payable(oldSeller).call{
+            value: msg.value
+        }("");
+        if (priceTransferSuccess) {
+            revert NFTMarketplace__PriceTransferFailed();
+        }
+        emit TokenPurchased(
+            _tokenId,
+            msg.sender,
+            s_tokenIdToListedToken[_tokenId].price
+        );
     }
 
     // Getter functions
