@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 error NFTMarketplace__NotOwner();
 error NFTMarketplace__PriceCannotBeZero();
 error NFTMarketplace__ListingPriceNotEqual();
+error NFTMarketplace__BuyNotSameAsSellPrice();
 error NFTMarketplace__ListingPriceTransferFailed();
 error NFTMarketplace__PriceTransferFailed();
 
@@ -122,6 +123,9 @@ contract NFTMarketplace is ERC721URIStorage {
      * @param _tokenId to transfer
      */
     function buyNFT(uint256 _tokenId) external payable {
+        if (s_tokenIdToListedToken[_tokenId].price != msg.value) {
+            revert NFTMarketplace__BuyNotSameAsSellPrice();
+        }
         address oldSeller = s_tokenIdToListedToken[_tokenId].seller;
 
         s_tokenIdToListedToken[_tokenId].owner = payable(msg.sender);
@@ -136,17 +140,17 @@ contract NFTMarketplace is ERC721URIStorage {
         approve(address(this), _tokenId);
 
         // Sends the listing price to owmer of the contract
-        (bool listingPriceTransferSuccess, ) = payable(i_owner).call{
+        (bool listingPriceTransferSuccess, ) = i_owner.call{
             value: i_listingPrice
         }("");
-        if (listingPriceTransferSuccess) {
+        if (!listingPriceTransferSuccess) {
             revert NFTMarketplace__ListingPriceTransferFailed();
         }
         // Sends the price to the creator of NFT (seller)
         (bool priceTransferSuccess, ) = payable(oldSeller).call{
             value: msg.value
         }("");
-        if (priceTransferSuccess) {
+        if (!priceTransferSuccess) {
             revert NFTMarketplace__PriceTransferFailed();
         }
         emit TokenPurchased(
