@@ -110,4 +110,43 @@ const { expect, assert } = require("chai");
             .withArgs(tokenID, ownerAddress, sellerAddress, price, soldToken);
         });
       });
+
+      describe("buy NFT", () => {
+        let tokenId, newBuyer;
+        beforeEach(async () => {
+          await nft.createToken(tokenURI, price, { value: listingPrice });
+          tokenId = await nft.getTokenId();
+          newBuyer = addresses[1];
+          await nft.connect(newBuyer).buyNFT(tokenId, { value: price });
+        });
+
+        it("reverts when buy price is less then sell price", async () => {
+          await nft.createToken(tokenURI, price, { value: listingPrice });
+          const tokenId2 = await nft.getTokenId();
+          await expect(nft.connect(newBuyer).buyNFT(tokenId2, { value: ethers.parseEther("0.009") })).to.be.revertedWithCustomError(
+            nft,
+            "NFTMarketplace__BuyNotSameAsSellPrice"
+          );
+        });
+
+        it("checks if tokenIdToListedToken has been updated", async () => {
+          const zeroAddress = ethers.ZeroAddress;
+          const listedToken = await nft.getTokenToIdListed(tokenId);
+          assert.equal(listedToken.tokenId, tokenId);
+          assert.equal(listedToken.owner, newBuyer.address);
+          assert.equal(listedToken.seller, zeroAddress);
+          assert.equal(listedToken.price, listedToken.price);
+          assert.equal(listedToken.sold, true);
+        });
+
+        it("increments the item sold vaiable", async () => {
+          const itemsSold = await nft.getItemSold();
+          assert.equal(itemsSold, 1);
+        });
+
+        it("transfers nft to buyer", async () => {
+          const addressOfNFTOwner = await nft.ownerOf(tokenId);
+          assert.equal(addressOfNFTOwner, newBuyer.address);
+        });
+      });
     });
