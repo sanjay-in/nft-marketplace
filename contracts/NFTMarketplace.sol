@@ -23,7 +23,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
     // State variables
     address payable private immutable i_owner;
-    uint256 private immutable i_listingPrice;
+    uint256 private s_listingPrice;
     uint256 private s_tokenId;
     uint256 private s_itemSold;
     mapping(uint256 => ListedToken) private s_tokenIdToListedToken;
@@ -59,7 +59,7 @@ contract NFTMarketplace is ERC721URIStorage {
     }
 
     modifier listingPriceMatch() {
-        if (msg.value != i_listingPrice) {
+        if (msg.value != s_listingPrice) {
             revert NFTMarketplace__ListingPriceNotEqual();
         }
         _;
@@ -67,7 +67,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
     constructor(uint256 listingPrice) ERC721("NFTMarketplace", "NFT") {
         i_owner = payable(msg.sender);
-        i_listingPrice = listingPrice;
+        s_listingPrice = listingPrice;
     }
 
     /**
@@ -141,7 +141,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
         // Sends the listing price to owmer of the contract
         (bool listingPriceTransferSuccess, ) = i_owner.call{
-            value: i_listingPrice
+            value: s_listingPrice
         }("");
         if (!listingPriceTransferSuccess) {
             revert NFTMarketplace__ListingPriceTransferFailed();
@@ -166,7 +166,7 @@ contract NFTMarketplace is ERC721URIStorage {
     }
 
     function getListingPrice() external view returns (uint256) {
-        return i_listingPrice;
+        return s_listingPrice;
     }
 
     function getTokenId() external view onlyOwner returns (uint256) {
@@ -181,5 +181,10 @@ contract NFTMarketplace is ERC721URIStorage {
         uint256 _tokenId
     ) external view onlyOwner returns (ListedToken memory) {
         return s_tokenIdToListedToken[_tokenId];
+    }
+
+    // Setter functions
+    function setListingPrice(uint256 _listingPrice) external onlyOwner {
+        s_listingPrice = _listingPrice;
     }
 }
