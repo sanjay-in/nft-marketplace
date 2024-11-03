@@ -254,4 +254,19 @@ const { expect, assert } = require("chai");
           assert.equal(unsoldNFTsByByer2, 0);
         });
       });
+
+      describe("setter fucntion", () => {
+        it("change listing price", async () => {
+          const newlistingPrice = ethers.parseEther("0.05");
+          await nft.setListingPrice(newlistingPrice);
+          const latestListingPrice = await nft.getListingPrice();
+          assert.equal(newlistingPrice, latestListingPrice);
+        });
+
+        it("reverts if non owner tries to set listing price", async () => {
+          const newUser = addresses[1];
+          const newlistingPrice = ethers.parseEther("0.05");
+          await expect(nft.connect(newUser).setListingPrice(newlistingPrice)).to.be.revertedWithCustomError(nft, "NFTMarketplace__NotOwner");
+        });
+      });
     });
