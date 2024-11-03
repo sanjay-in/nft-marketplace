@@ -148,5 +148,44 @@ const { expect, assert } = require("chai");
           const addressOfNFTOwner = await nft.ownerOf(tokenId);
           assert.equal(addressOfNFTOwner, newBuyer.address);
         });
+
+        // it("reverts when listing price transfer fails", async () => {
+        //   const mockContract = await deployments.get("MockFail");
+        //   const mockFail = await ethers.getContractAt(mockContract.abi, mockContract.address);
+
+        //   // const { deploy } = deployments;
+        //   // const mockNFTContract = await deploy("NFTMarketplace", {
+        //   //   from: addresses[1].address,
+        //   //   args: [listingPrice],
+        //   //   log: false,
+        //   //   waitConfirmations: 1,
+        //   // });
+        //   // const mockNFT = await ethers.getContractAt(mockNFTContract.abi, mockNFTContract.address);
+
+        //   mockFail.runner.address = mockContract.address;
+        //   console.log(mockFail.runner);
+
+        //   const mockNFTContract = await ethers.getContractFactory("NFTMarketplace", mockContract);
+        //   const mockNFT = await mockNFTContract.deploy(listingPrice);
+        //   await mockNFT.waitForDeployment();
+
+        //   // await mockNFT.createToken(tokenURI, price, { value: listingPrice });
+        //   // await mockNFT.connect(addresses[1]).buyNFT(1, { value: price });
+
+        //   const getOwner = await mockNFT.getOwner();
+        //   const getOwnerNFT = await nft.getOwner();
+        //   console.log("mockContract.address", mockContract.address);
+        //   console.log("getOwner", getOwner);
+        //   console.log("getOwnerNFT", getOwnerNFT);
+        //   console.log("deployer", deployer);
+        // });
+
+        it("emits event after bought", async () => {
+          await nft.createToken(tokenURI, price, { value: listingPrice });
+          const tokenId2 = await nft.getTokenId();
+          await expect(nft.connect(newBuyer).buyNFT(tokenId2, { value: price }))
+            .to.emit(nft, "TokenPurchased")
+            .withArgs(tokenId2, newBuyer, price);
+        });
       });
     });
