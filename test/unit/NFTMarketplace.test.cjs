@@ -188,4 +188,70 @@ const { expect, assert } = require("chai");
             .withArgs(tokenId2, newBuyer, price);
         });
       });
+
+      describe("fetchNFTs", () => {
+        it("check if receive all NFTs user purchased", async () => {
+          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, { value: listingPrice });
+
+          const buyer1TokenIds = [];
+          // Buys first NFT
+          const tokenId1 = 1;
+          const buyer1 = addresses[1];
+          await nft.connect(buyer1).buyNFT(tokenId1, { value: price });
+          buyer1TokenIds.push(tokenId1);
+
+          // Other user buys second NFT
+          const tokenId2 = 2;
+          const buyer2 = addresses[2];
+          await nft.connect(buyer2).buyNFT(tokenId2, { value: price });
+
+          // Buyer 1 buys 3rd NFT
+          const tokenId3 = 3;
+          await nft.connect(buyer1).buyNFT(tokenId3, { value: price });
+          buyer1TokenIds.push(tokenId3);
+
+          const myNFTs = await nft.connect(buyer1).fetchMyNFTs();
+
+          assert.equal(myNFTs.length, 2);
+          for (let index = 0; index < myNFTs.length; index++) {
+            assert.equal(buyer1TokenIds[index], myNFTs[index].tokenId);
+          }
+        });
+
+        it("check if receive all listed NFTs", async () => {
+          const buyer1 = addresses[1];
+          const buyer2 = addresses[2];
+          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
+          await nft.connect(buyer2).createToken(tokenURI, price, { value: listingPrice });
+          await nft.connect(buyer2).createToken(tokenURI, price, { value: listingPrice });
+
+          const allNFTs = await nft.fetchListedNFTs();
+
+          assert.equal(allNFTs.length, 3);
+          for (let index = 0; index < allNFTs.length; index++) {
+            assert.equal(allNFTs[index].tokenId, index + 1);
+          }
+        });
+
+        it("check if receive all unsold NFTs by a user", async () => {
+          const buyer1 = addresses[1];
+          const buyer2 = addresses[2];
+          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
+          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
+          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
+
+          await nft.connect(buyer2).buyNFT(1, { value: price });
+          await nft.connect(buyer2).buyNFT(3, { value: price });
+
+          const unsoldNFTs = await nft.connect(buyer1).fetchUserUnsoldNFTs();
+
+          assert.equal(unsoldNFTs.length, 1);
+          assert.equal(unsoldNFTs[0].tokenId, 2);
+
+          const unsoldNFTsByByer2 = await nft.connect(buyer2).fetchUserUnsoldNFTs();
+          assert.equal(unsoldNFTsByByer2, 0);
+        });
+      });
     });
