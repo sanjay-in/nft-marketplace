@@ -160,6 +160,88 @@ contract NFTMarketplace is ERC721URIStorage {
         );
     }
 
+    /**
+     * @notice fetches all the NFT's bought by the user
+     * @return array of s_tokenIdToListedToken
+     */
+    function fetchMyNFTs() external view returns (ListedToken[] memory) {
+        uint256 myNFTsCount;
+        for (uint i = 0; i < s_tokenId; i++) {
+            if (s_tokenIdToListedToken[i + 1].owner == msg.sender) {
+                myNFTsCount++;
+            }
+        }
+
+        ListedToken[] memory myNFTs = new ListedToken[](myNFTsCount);
+        uint256 myNFTsIndex;
+        for (uint i = 1; i <= s_tokenId; i++) {
+            if (s_tokenIdToListedToken[i].owner == msg.sender) {
+                myNFTs[myNFTsIndex] = s_tokenIdToListedToken[i];
+                myNFTsIndex++;
+            }
+        }
+
+        return myNFTs;
+    }
+
+    /**
+     * @notice fetches all the listed NFT's
+     * @return array of s_tokenIdToListedToken
+     */
+    function fetchListedNFTs() external view returns (ListedToken[] memory) {
+        uint256 listedNFTsCount;
+        for (uint i = 0; i < s_tokenId; i++) {
+            if (s_tokenIdToListedToken[i + 1].sold == false) {
+                listedNFTsCount++;
+            }
+        }
+
+        ListedToken[] memory listedNFTs = new ListedToken[](listedNFTsCount);
+        uint256 listedNFTsIndex;
+        for (uint i = 1; i <= s_tokenId; i++) {
+            if (s_tokenIdToListedToken[i].sold == false) {
+                listedNFTs[listedNFTsIndex] = s_tokenIdToListedToken[i];
+                listedNFTsIndex++;
+            }
+        }
+
+        return listedNFTs;
+    }
+
+    /**
+     * @notice fetches unsold NFT's created by user
+     * @return array of s_tokenIdToListedToken
+     */
+    function fetchUserUnsoldNFTs()
+        external
+        view
+        returns (ListedToken[] memory)
+    {
+        uint256 unsoldNFTsCount;
+        for (uint i = 0; i < s_tokenId; i++) {
+            if (
+                s_tokenIdToListedToken[i + 1].seller == msg.sender &&
+                s_tokenIdToListedToken[i + 1].sold == false
+            ) {
+                unsoldNFTsCount++;
+            }
+        }
+
+        ListedToken[] memory unsoldNFTs = new ListedToken[](unsoldNFTsCount);
+        uint256 unsoldNFTsIndex;
+        for (uint i = 1; i <= s_tokenId; i++) {
+            if (
+                s_tokenIdToListedToken[i].seller == msg.sender &&
+                s_tokenIdToListedToken[i].sold == false
+            ) {
+                unsoldNFTs[unsoldNFTsIndex] = s_tokenIdToListedToken[i];
+                unsoldNFTsIndex++;
+            }
+        }
+
+        return unsoldNFTs;
+    }
+
     // Getter functions
     function getOwner() external view returns (address) {
         return i_owner;
