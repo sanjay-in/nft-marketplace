@@ -1,0 +1,22 @@
+#navbar {
+  padding: 1rem 1.5rem;
+}
+
+.title {
+  color: royalblue;
+  font-weight: 900;
+}
+
+#nav {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+#link {
+  font-weight: 600;
+}
+
+#link:hover {
+  color: cornflowerblue;
+}
