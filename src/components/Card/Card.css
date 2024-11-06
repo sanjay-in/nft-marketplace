@@ -1,0 +1,36 @@
+.card-component {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 35px 0px;
+  transition: all 0.2s ease-in-out;
+}
+
+.card-component:hover {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transform: translate3d(0px, -5px, 0px);
+}
+
+#card-title {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(19, 19, 19);
+}
+
+#card-img {
+  height: 10rem;
+  object-fit: cover;
+}
+.card-subdetails {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+#card-subdetail-heading {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  line-height: 0.3;
+}
