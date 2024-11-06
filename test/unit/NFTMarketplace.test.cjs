@@ -11,6 +11,8 @@ const { expect, assert } = require("chai");
         "https://v2.emblemvault.io/v3/meta/0x7E6027a6A84fC1F6Db6782c523EFe62c923e46ff/42741568268271627005603014856691612673583670625740997034891561691910895568241";
       const price = ethers.parseEther("0.01");
       const listingPrice = ethers.parseEther("0.001");
+      const title = "New Title";
+      const imgURL = "https://i.pinimg.com/736x/20/3e/bf/203ebf2a65c4ca014525972afe3fbae0.jpg";
       beforeEach(async () => {
         await deployments.fixture(["all"]);
 
@@ -48,38 +50,38 @@ const { expect, assert } = require("chai");
 
       describe("createToken", () => {
         it("reverts if price is zero", async () => {
-          await expect(nft.createToken(tokenURI, 0)).to.be.revertedWithCustomError(nft, "NFTMarketplace__PriceCannotBeZero");
+          await expect(nft.createToken(tokenURI, 0, title, imgURL)).to.be.revertedWithCustomError(nft, "NFTMarketplace__PriceCannotBeZero");
         });
 
         it("reverts if listing prices dont match", async () => {
           const incorrectListingPrice = ethers.parseEther("0.0011");
-          await expect(nft.createToken(tokenURI, price, { value: incorrectListingPrice })).to.be.revertedWithCustomError(
+          await expect(nft.createToken(tokenURI, price, title, imgURL, { value: incorrectListingPrice })).to.be.revertedWithCustomError(
             nft,
             "NFTMarketplace__ListingPriceNotEqual"
           );
         });
 
         it("increments the tokenId", async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
           const fetchedTokenCount = await nft.getTokenId();
           assert.equal(fetchedTokenCount, 1);
         });
 
         it("checks if token uri is set", async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
           const fetchedTokenURI = await nft.tokenURI(1);
           assert.equal(tokenURI, fetchedTokenURI);
         });
 
         it("returns tokenId", async () => {
-          const createToken = await nft.createToken.staticCall(tokenURI, price, { value: listingPrice });
+          const createToken = await nft.createToken.staticCall(tokenURI, price, title, imgURL, { value: listingPrice });
           assert.equal(createToken, 1);
         });
       });
 
       describe("createTokenListed", () => {
         beforeEach(async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
         });
 
         it("maps the tokenId to ListedToken", async () => {
@@ -105,7 +107,7 @@ const { expect, assert } = require("chai");
           const ownerAddress = contract.address;
           const sellerAddress = deployer;
           const soldToken = false;
-          await expect(nft.createToken(tokenURI, price, { value: listingPrice }))
+          await expect(nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice }))
             .to.emit(nft, "TokenListed")
             .withArgs(tokenID, ownerAddress, sellerAddress, price, soldToken);
         });
@@ -114,14 +116,14 @@ const { expect, assert } = require("chai");
       describe("buy NFT", () => {
         let tokenId, newBuyer;
         beforeEach(async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
           tokenId = await nft.getTokenId();
           newBuyer = addresses[1];
           await nft.connect(newBuyer).buyNFT(tokenId, { value: price });
         });
 
         it("reverts when buy price is less then sell price", async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
           const tokenId2 = await nft.getTokenId();
           await expect(nft.connect(newBuyer).buyNFT(tokenId2, { value: ethers.parseEther("0.009") })).to.be.revertedWithCustomError(
             nft,
@@ -181,7 +183,7 @@ const { expect, assert } = require("chai");
         // });
 
         it("emits event after bought", async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
           const tokenId2 = await nft.getTokenId();
           await expect(nft.connect(newBuyer).buyNFT(tokenId2, { value: price }))
             .to.emit(nft, "TokenPurchased")
@@ -191,9 +193,9 @@ const { expect, assert } = require("chai");
 
       describe("fetchNFTs", () => {
         it("check if receive all NFTs user purchased", async () => {
-          await nft.createToken(tokenURI, price, { value: listingPrice });
-          await nft.createToken(tokenURI, price, { value: listingPrice });
-          await nft.createToken(tokenURI, price, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
+          await nft.createToken(tokenURI, price, title, imgURL, { value: listingPrice });
 
           const buyer1TokenIds = [];
           // Buys first NFT
@@ -223,9 +225,9 @@ const { expect, assert } = require("chai");
         it("check if receive all listed NFTs", async () => {
           const buyer1 = addresses[1];
           const buyer2 = addresses[2];
-          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
-          await nft.connect(buyer2).createToken(tokenURI, price, { value: listingPrice });
-          await nft.connect(buyer2).createToken(tokenURI, price, { value: listingPrice });
+          await nft.connect(buyer1).createToken(tokenURI, price, title, imgURL, { value: listingPrice });
+          await nft.connect(buyer2).createToken(tokenURI, price, title, imgURL, { value: listingPrice });
+          await nft.connect(buyer2).createToken(tokenURI, price, title, imgURL, { value: listingPrice });
 
           const allNFTs = await nft.fetchListedNFTs();
 
@@ -238,9 +240,9 @@ const { expect, assert } = require("chai");
         it("check if receive all unsold NFTs by a user", async () => {
           const buyer1 = addresses[1];
           const buyer2 = addresses[2];
-          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
-          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
-          await nft.connect(buyer1).createToken(tokenURI, price, { value: listingPrice });
+          await nft.connect(buyer1).createToken(tokenURI, price, title, imgURL, { value: listingPrice });
+          await nft.connect(buyer1).createToken(tokenURI, price, title, imgURL, { value: listingPrice });
+          await nft.connect(buyer1).createToken(tokenURI, price, title, imgURL, { value: listingPrice });
 
           await nft.connect(buyer2).buyNFT(1, { value: price });
           await nft.connect(buyer2).buyNFT(3, { value: price });
