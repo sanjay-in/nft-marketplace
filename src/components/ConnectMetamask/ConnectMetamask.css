@@ -1,0 +1,21 @@
+.connect-metamask {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 100;
+}
+.connect-metamask-text {
+  color: gray;
+}
+
+#connect-metamask-btn {
+  background-color: cornflowerblue;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+}
+
+#connect-metamask-btn:hover {
+  background-color: royalblue;
+}
