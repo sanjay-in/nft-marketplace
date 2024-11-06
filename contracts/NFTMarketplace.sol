@@ -15,6 +15,8 @@ contract NFTMarketplace is ERC721URIStorage {
     // Type declaration
     struct ListedToken {
         uint256 tokenId;
+        string title;
+        string imgURL;
         address payable owner;
         address payable seller;
         uint256 price;
@@ -76,11 +78,15 @@ contract NFTMarketplace is ERC721URIStorage {
      * Checks if listing price is same as declared
      * @param _tokenURI the tokenURI is received from frontend as string
      * @param _price at which the creator wishes to sell the NFT (in ether)
+     * @param _title the tokenURI is received from frontend as string
+     * @param _imageURL is the URL received from frontend
      * @return s_tokenId
      */
     function createToken(
         string memory _tokenURI,
-        uint256 _price
+        uint256 _price,
+        string memory _title,
+        string memory _imageURL
     )
         external
         payable
@@ -94,7 +100,7 @@ contract NFTMarketplace is ERC721URIStorage {
         _safeMint(msg.sender, s_tokenId);
         _setTokenURI(s_tokenId, _tokenURI);
 
-        createTokenListed(s_tokenId, _price);
+        createTokenListed(s_tokenId, _price, _title, _imageURL);
 
         return s_tokenId;
     }
@@ -104,10 +110,19 @@ contract NFTMarketplace is ERC721URIStorage {
      * Maps the tokenId with ListedToken, transfers token to contract and emits TokenListed event
      * @param _tokenId incremented token id
      * @param _price price is passed from the user
+     * @param _title the tokenURI is received from frontend as string
+     * @param _imageURL is the URL received from frontend
      */
-    function createTokenListed(uint256 _tokenId, uint256 _price) internal {
+    function createTokenListed(
+        uint256 _tokenId,
+        uint256 _price,
+        string memory _title,
+        string memory _imageURL
+    ) internal {
         s_tokenIdToListedToken[_tokenId] = ListedToken(
             _tokenId,
+            _title,
+            _imageURL,
             payable(address(this)),
             payable(msg.sender),
             _price,
