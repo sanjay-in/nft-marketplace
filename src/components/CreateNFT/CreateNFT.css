@@ -1,0 +1,10 @@
+.create-nft-button-area {
+  display: flex;
+  width: 100%;
+}
+
+.create-nft-button-area > button {
+  width: 100%;
+  height: 3rem;
+  font-weight: 600;
+}
