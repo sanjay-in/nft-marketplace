@@ -1,0 +1,11 @@
+.loading-text {
+  color: grey;
+  margin-top: 1rem;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%);
+}
