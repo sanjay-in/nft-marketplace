@@ -1,6 +1,11 @@
+.link {
+  text-decoration: none;
+}
+
 .card-component {
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 35px 0px;
   transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .card-component:hover {
