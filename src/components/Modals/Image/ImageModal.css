@@ -1,0 +1,14 @@
+.modal-image {
+  height: fit-content;
+  width: fit-content;
+  max-width: 90vw;
+  max-height: 90vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+#image-modal-body {
+  padding: 0;
+}
