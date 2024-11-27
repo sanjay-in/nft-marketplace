@@ -1,0 +1,29 @@
+.listing-page-cover {
+  width: 95%;
+  height: 35vh;
+  object-fit: cover;
+}
+
+.listing-page-title {
+  display: flex;
+  justify-content: flex-start;
+  margin: 1rem 2rem 0 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.listing-page-title-line {
+  margin: 0.5rem 2rem 0 2rem;
+}
+
+.listing-page-card-container {
+  display: grid;
+  margin: 1rem;
+  grid-template-columns: 19.8% 19.8% 19.8% 19.8% 19.8%;
+}
+
+.listing-page-notfound-container {
+  position: relative;
+  width: 96vw;
+  margin-top: 5rem;
+}
