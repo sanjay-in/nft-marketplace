@@ -1,5 +1,19 @@
 #navbar {
-  padding: 1rem 1.5rem;
+  padding: 1rem 0;
+}
+
+#navbar > div {
+  margin: auto 1rem;
+}
+
+.brand {
+  display: flex;
+}
+
+.logo {
+  height: 2rem;
+  width: 2rem;
+  margin-right: 0.5rem;
 }
 
 .title {
