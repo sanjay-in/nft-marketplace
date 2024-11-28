@@ -2,6 +2,7 @@ require("hardhat-deploy");
 require("solidity-coverage");
 require("@nomicfoundation/hardhat-ethers");
 require("@nomicfoundation/hardhat-chai-matchers");
+require("hardhat-gas-reporter");
 require("dotenv").config();
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
@@ -37,5 +38,11 @@ module.exports = {
     apiKey: {
       sepolia: ETHERSCAN_API_KEY,
     },
+  },
+  gasReporter: {
+    enabled: true,
+    currency: "USD",
+    outputFile: "gas-report.txt",
+    noColors: true,
   },
 };
