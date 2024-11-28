@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const ConfirmationModal = ({ show, handleClose, buyNFT }) => {
+const ConfirmationModal = ({ show, handleClose, buyNFT, loading }) => {
   return (
     <Modal show={show} onHide={() => handleClose(false)} centered>
       <Modal.Header closeButton>
@@ -12,7 +12,7 @@ const ConfirmationModal = ({ show, handleClose, buyNFT }) => {
         <Button variant="secondary" onClick={() => handleClose(false)}>
           Close
         </Button>
-        <Button variant="primary" onClick={buyNFT}>
+        <Button variant="primary" onClick={buyNFT} disabled={loading}>
           Confirm
         </Button>
       </Modal.Footer>
