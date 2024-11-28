@@ -5,7 +5,7 @@ import { trimWalletAddress } from "../../../utils/utils";
 import "./Card.css";
 import { Link } from "react-router-dom";
 
-const CardComponent = ({ image, price, id, seller, title }) => {
+const CardComponent = ({ image, price, id, seller, title, sold }) => {
   return (
     <Link
       className="link"
@@ -22,16 +22,18 @@ const CardComponent = ({ image, price, id, seller, title }) => {
             <div className="card-subdetails">
               <div>
                 <Card.Subtitle id="card-subdetail-heading" className="mb-2 text-muted">
-                  Price
+                  {sold ? "Purchased" : ""} Price
                 </Card.Subtitle>
                 <Card.Title id="card-title">{ethers.formatEther(price)} ETH</Card.Title>
               </div>
-              <div>
-                <Card.Subtitle id="card-subdetail-heading" className="mb-2 text-muted">
-                  Creator
-                </Card.Subtitle>
-                <Card.Title id="card-title">{trimWalletAddress(seller)}</Card.Title>
-              </div>
+              {sold ? null : (
+                <div>
+                  <Card.Subtitle id="card-subdetail-heading" className="mb-2 text-muted">
+                    Creator
+                  </Card.Subtitle>
+                  <Card.Title id="card-title">{trimWalletAddress(seller)}</Card.Title>
+                </div>
+              )}
             </div>
           </Card.Body>
         </Card>
