@@ -7,7 +7,7 @@ import { getContract, toastMessage } from "../../../utils/utils";
 import coverImage from "../../assets/cover.png";
 import "./Listing.css";
 
-const Listing = ({ listedNFT }) => {
+const Listing = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
