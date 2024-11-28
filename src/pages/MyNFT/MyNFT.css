@@ -1,0 +1,15 @@
+.create-nft-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+.nft-section-card-container {
+  display: grid;
+  margin: 1rem;
+  grid-template-columns: 19.8% 19.8% 19.8% 19.8% 19.8%;
+}
