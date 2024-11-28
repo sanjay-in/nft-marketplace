@@ -1,0 +1,178 @@
+.nft-page {
+  display: flex;
+  width: 100vw;
+  padding: 2rem;
+}
+
+.nft-page-image-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fa-external-link {
+  color: cornflowerblue;
+  font-size: 1.2rem;
+  margin: 0.7rem 1rem 0 0.5rem;
+  cursor: pointer;
+}
+
+.nft-page-image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid gainsboro;
+  border-radius: 1rem;
+  height: 80vh;
+  width: 40vw;
+}
+
+.nft-page-image {
+  width: 100%;
+  height: 93%;
+  object-fit: cover;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.nft-page-info-container {
+  width: 55%;
+  padding: 1rem 2rem;
+}
+
+.nft-page-name {
+  display: flex;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.nft-page-info {
+  display: flex;
+  width: 100%;
+}
+
+.nft-page-price {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nft-page-price-heading {
+  font-size: 1rem;
+  font-weight: 500;
+  color: gray;
+  display: flex;
+  justify-content: left;
+}
+
+.nft-page-price-value {
+  display: flex;
+  justify-content: left;
+}
+
+#nft-page-price-button {
+  width: 20rem;
+  height: 3rem;
+  margin: 1.7rem 0;
+  font-weight: 600;
+}
+
+.nft-page-purchased-text {
+  display: flex;
+  align-items: center;
+  width: 20rem;
+  height: 3rem;
+  margin: 1.7rem 0;
+  font-weight: 600;
+  color: green;
+  font-size: 1.2rem;
+}
+
+#nft-page-purchased-icon {
+  margin-right: 1rem;
+  color: green;
+}
+
+.fa-shopping-cart {
+  margin-left: 0.5rem;
+}
+
+.nft-page-token-info {
+  margin: 1rem 0rem 3.4rem 2rem;
+  width: 100%;
+  border: 1px solid gainsboro;
+  border-radius: 1rem;
+}
+
+.nft-page-info-heading {
+  display: flex;
+  font-weight: 600;
+  border-bottom: 1px solid gainsboro;
+  padding: 0.2rem 1rem;
+  align-items: center;
+}
+
+.nft-page-details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 1rem 0;
+  border-bottom: 1px solid gainsboro;
+}
+
+.nft-page-details:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.nft-page-detail-heading {
+  color: gray;
+  padding-left: 1rem;
+}
+
+.nft-page-detail {
+  padding-right: 1.5rem;
+}
+
+.nft-page-description {
+  border: 1px solid gainsboro;
+  border-radius: 1rem;
+  width: 100%;
+  height: 50%;
+}
+
+.nft-page-description-head {
+  display: flex;
+  align-items: center;
+  margin: 2%;
+  font-weight: 600;
+}
+
+.nft-page-description-head > i {
+  margin-right: 1rem;
+}
+
+.nft-page-description-paragraph {
+  border-top: 1px solid gainsboro;
+  padding: 1rem;
+  display: flex;
+  overflow-y: scroll;
+  max-height: 75%;
+  text-align: justify;
+}
+
+.nft-page-description-paragraph::-webkit-scrollbar {
+  width: 5px;
+}
+
+.nft-page-description-paragraph::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nft-page-description-paragraph::-webkit-scrollbar-thumb {
+  background: gray;
+}
+
+.nft-page-description-paragraph::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
