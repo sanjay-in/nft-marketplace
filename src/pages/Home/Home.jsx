@@ -15,11 +15,11 @@ const Home = () => {
       errorElement: <Error />,
     },
     {
-      path: "/myNFTs",
+      path: "myNFTs",
       element: <MyNFT />,
     },
     {
-      path: `/nft`,
+      path: `nft`,
       element: <NFTPage />,
     },
   ]);
