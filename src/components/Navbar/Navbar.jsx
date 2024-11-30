@@ -28,7 +28,7 @@ const NavigationBar = () => {
               <Nav.Link eventKey="/" id="link" href="/">
                 Marketplace
               </Nav.Link>
-              <Nav.Link eventKey="/myNFTs" id="link" href={`${window.location.href + "/myNFTs"}`}>
+              <Nav.Link eventKey="/myNFTs" id="link" href="/myNFTs">
                 My NFTs
               </Nav.Link>
             </Nav>
