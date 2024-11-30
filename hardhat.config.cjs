@@ -2,6 +2,7 @@ require("hardhat-deploy");
 require("solidity-coverage");
 require("@nomicfoundation/hardhat-ethers");
 require("@nomicfoundation/hardhat-chai-matchers");
+require("@nomicfoundation/hardhat-verify");
 require("hardhat-gas-reporter");
 require("dotenv").config();
 
