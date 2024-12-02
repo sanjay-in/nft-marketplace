@@ -37,18 +37,18 @@ const MyNFT = () => {
     }
   };
 
-  const sectionHandler = (sectionName) => {
+  const sectionHandler = async (sectionName) => {
     if (sectionName == "unsold") {
       setActiveKey("1");
       setSection(sectionName);
       setLoading(true);
-      getUnsoldNFTs();
+      await getUnsoldNFTs();
       setLoading(false);
     } else {
       setSection(sectionName);
       setActiveKey("2");
       setLoading(true);
-      getPurchasedNFTs();
+      await getPurchasedNFTs();
       setLoading(false);
     }
   };
